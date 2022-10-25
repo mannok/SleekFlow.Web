@@ -1,0 +1,6 @@
+/.vs
+/SleekFlow.Web.WebAPI/bin
+/SleekFlow.Web.WebAPI/obj
+obj
+bin
+*.user
