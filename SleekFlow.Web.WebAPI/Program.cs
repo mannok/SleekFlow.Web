@@ -1,3 +1,6 @@
+using Microsoft.Extensions.DependencyInjection;
+using System.Reflection;
+
 namespace SleekFlow.Web.WebAPI
 {
     public class Program
@@ -11,7 +14,12 @@ namespace SleekFlow.Web.WebAPI
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen();
+            builder.Services.AddSwaggerGen(setupAction =>
+            {
+                setupAction.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, $"{Assembly.GetExecutingAssembly().GetName().Name}.xml"));
+            });
+
+            builder.Services.AddAutoMapper(typeof(Program));
 
             var app = builder.Build();
 
