@@ -6,13 +6,12 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Newtonsoft.Json;
 using SleekFlow.Web.DAL;
-using SleekFlow.Web.Domain.Todo;
 
 namespace SleekFlow.Web.DAL.DbContexts
 {
     public partial class SleekFlowWebDbContext : AuditDbContext
     {
-        public DbSet<Todo> Todos { get; set; }
+        public DbSet<Todos.Todo> Todos { get; set; }
         public DbSet<AuditEntry> AuditEntries { get; set; }
 
         public SleekFlowWebDbContext()

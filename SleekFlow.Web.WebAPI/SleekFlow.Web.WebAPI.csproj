@@ -18,7 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\SleekFlow.Web.DAL\SleekFlow.Web.DAL.csproj" />
+    <ProjectReference Include="..\SleekFlow.Web.Application\SleekFlow.Web.Application.csproj" />
   </ItemGroup>
 
 </Project>
