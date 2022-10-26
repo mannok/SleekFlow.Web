@@ -1,4 +1,7 @@
 ﻿using Audit.EntityFramework.Providers;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.DependencyInjection;
 using SleekFlow.Web.DAL.DbContexts;
 using System;
 using System.Collections.Generic;
@@ -9,21 +12,20 @@ using System.Threading.Tasks;
 
 namespace SleekFlow.Web.DAL
 {
-    public class DbAuditConfiguration
+    public static class DbAuditTrailConfiguration
     {
-        [ModuleInitializer]
-        public static void Configure()
+        public static void UseDbAuditTrail(this IApplicationBuilder applicationBuilder)
         {
-            Audit.Core.Configuration.DataProvider = new EntityFrameworkDataProvider()
+            Audit.Core.Configuration.Setup().UseFactory(() => new EntityFrameworkDataProvider()
             {
-                DbContextBuilder = ev => new SleekFlowWebDbContext(),
+                DbContextBuilder = ev => applicationBuilder.ApplicationServices.CreateScope().ServiceProvider.GetRequiredService<SleekFlowWebDbContext>(),
                 ExplicitMapper = ee => typeof(AuditEntry),
                 AuditEntityAction = (evt, entry, auditEntity) =>
                 {
                     var a = (AuditEntry)auditEntity;
-                    a.Id = 0;
+                    a.Id = default;
                     a.AuditDate = DateTime.UtcNow;
-                    a.UserName = evt.Environment.UserName;
+                    a.UserName = applicationBuilder.ApplicationServices.GetRequiredService<IHttpContextAccessor>().HttpContext.User.Claims.FirstOrDefault(x => x.Type == System.Security.Claims.ClaimTypes.NameIdentifier)?.Value ?? evt.Environment.UserName;
                     a.EntityType = entry.Table;
                     a.AuditAction = entry.Action; // Insert, Update, Delete
                     switch (entry.Action)
@@ -41,7 +43,7 @@ namespace SleekFlow.Web.DAL
 
                     return Task.FromResult(true); // return false to ignore the audit
                 }
-            };
+            });
         }
     }
 }

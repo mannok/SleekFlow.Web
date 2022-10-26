@@ -6,6 +6,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
+using SleekFlow.Web.DAL;
+using SleekFlow.Web.DAL.DbContexts;
+using System.IdentityModel.Tokens.Jwt;
 using System.Reflection;
 using System.Text;
 
@@ -59,7 +62,8 @@ namespace SleekFlow.Web.WebAPI
                 });
             });
             builder.Services.AddAutoMapper(typeof(Program));
-            builder.Services.AddDbContext<DAL.DbContexts.SleekFlowWebDbContext>(optionsAction => { });
+            builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            builder.Services.AddDbContext<SleekFlowWebDbContext>();
 
             // Add JWT configuration
             builder.Services.AddAuthentication(o =>
@@ -93,6 +97,8 @@ namespace SleekFlow.Web.WebAPI
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
+
+            app.UseDbAuditTrail();
 
             app.UseHttpsRedirection();
 

@@ -60,7 +60,7 @@ namespace SleekFlow.Web.WebAPI.Controllers
                     {
                         Subject = new ClaimsIdentity(new[]
                         {
-                        new Claim("Id", "1"),
+                        new Claim("Id", Guid.NewGuid().ToString()),
                         new Claim(JwtRegisteredClaimNames.Sub, login.Username),
                         new Claim(JwtRegisteredClaimNames.Email, login.Username),
                         // the JTI is used for our refresh token which we will be convering in the next video

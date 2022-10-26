@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Audit.EntityFramework;
 using Audit.EntityFramework.Providers;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Newtonsoft.Json;
@@ -11,6 +12,8 @@ namespace SleekFlow.Web.DAL.DbContexts
 {
     public partial class SleekFlowWebDbContext : AuditDbContext
     {
+        private readonly IHttpContextAccessor httpContextAccessor;
+
         public DbSet<Todos.Todo> Todos { get; set; }
         public DbSet<AuditEntry> AuditEntries { get; set; }
 
