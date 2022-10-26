@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SleekFlow.Web.Todos;
 using SleekFlow.Web.WebAPI.Filters.Todos;
@@ -7,9 +7,9 @@ using System.Collections;
 
 namespace SleekFlow.Web.WebAPI.Controllers
 {
+    [Route("api/[controller]")]
     [ApiController]
-    [Route("[controller]")]
-    public class TodoController : Controller
+    public class TodoController : ControllerBase
     {
         private readonly IMapper mapper;
         private readonly TodoService todoService;
@@ -21,12 +21,25 @@ namespace SleekFlow.Web.WebAPI.Controllers
         }
 
         /// <summary>
+        /// get todo
+        /// </summary>
+        /// <param name="id">todo id, e.g. 4</param>
+        /// <returns></returns>
+        [HttpGet("{id}")]
+        public  Todo? Get(long id)
+        {
+            var result = ( todoService.GetTodos(new TodoRequestFilter { Id = id })).Result.SingleOrDefault();
+
+            return result;
+        }
+
+        /// <summary>
         /// search todos
         /// </summary>
         /// <param name="requestFilter"></param>
         /// <returns></returns>
         [HttpGet]
-        public async Task<IEnumerable<Todo>> Get([FromQuery] TodoRequestFilter requestFilter)
+        public async Task<IEnumerable<Todo>> Search([FromQuery] TodoRequestFilter requestFilter)
         {
             var result = await todoService.GetTodos(requestFilter);
 
@@ -66,8 +79,7 @@ namespace SleekFlow.Web.WebAPI.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        [HttpDelete]
-        [Route("{id}")]
+        [HttpDelete("{id}")]
         public async Task<long> Delete(long id)
         {
             var result = await todoService.DeleteTodo(id);
