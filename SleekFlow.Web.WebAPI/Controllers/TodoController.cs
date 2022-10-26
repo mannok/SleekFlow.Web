@@ -26,9 +26,9 @@ namespace SleekFlow.Web.WebAPI.Controllers
         /// <param name="id">todo id, e.g. 4</param>
         /// <returns></returns>
         [HttpGet("{id}")]
-        public  Todo? Get(long id)
+        public async Task<Todo?> Get(long id)
         {
-            var result = ( todoService.GetTodos(new TodoRequestFilter { Id = id })).Result.SingleOrDefault();
+            var result = (await todoService.GetTodos(new TodoRequestFilter { Id = id })).SingleOrDefault();
 
             return result;
         }
