@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace SleekFlow.Web.Todos
 {
-    public class TodoService
+    public class TodoService : ITodoService
     {
         private readonly SleekFlowWebDbContext sleekFlowWebDbContext;
 

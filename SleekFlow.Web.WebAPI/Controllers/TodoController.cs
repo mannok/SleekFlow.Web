@@ -12,9 +12,9 @@ namespace SleekFlow.Web.WebAPI.Controllers
     public class TodoController : ControllerBase
     {
         private readonly IMapper mapper;
-        private readonly TodoService todoService;
+        private readonly ITodoService todoService;
 
-        public TodoController(IMapper mapper, TodoService todoService)
+        public TodoController(IMapper mapper, ITodoService todoService)
         {
             this.mapper = mapper;
             this.todoService = todoService;

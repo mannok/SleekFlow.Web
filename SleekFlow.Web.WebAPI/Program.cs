@@ -8,6 +8,7 @@ using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
 using SleekFlow.Web.DAL;
 using SleekFlow.Web.DAL.DbContexts;
+using SleekFlow.Web.Todos;
 using System.IdentityModel.Tokens.Jwt;
 using System.Reflection;
 using System.Text;
@@ -87,7 +88,7 @@ namespace SleekFlow.Web.WebAPI
             builder.Services.AddAuthorization();
             builder.Services.AddEndpointsApiExplorer();
 
-            builder.Services.AddTransient<Todos.TodoService>();
+            builder.Services.AddTransient<ITodoService, TodoService>();
 
             var app = builder.Build();
 
