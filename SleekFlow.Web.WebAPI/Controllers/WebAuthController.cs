@@ -86,5 +86,25 @@ namespace SleekFlow.Web.WebAPI.Controllers
             HttpContext.Response.StatusCode = 401;
             return null!;
         }
+
+        /// <summary>
+        /// return true if logged in
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("Status")]
+        [AllowAnonymous]
+        public async Task<bool> Status()
+        {
+            return await Task.FromResult(User.Identity?.IsAuthenticated ?? false);
+        }
+
+        [HttpGet]
+        [Route("TestAuthorization")]
+        [Authorize(Roles = "admin")]
+        public async Task TestAuthorization()
+        {
+            return;
+        }
     }
 }
