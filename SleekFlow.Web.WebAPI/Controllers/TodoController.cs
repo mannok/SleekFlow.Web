@@ -12,10 +12,12 @@ namespace SleekFlow.Web.WebAPI.Controllers
     public class TodoController : Controller
     {
         private readonly IMapper mapper;
+        private readonly TodoService todoService;
 
-        public TodoController(IMapper mapper)
+        public TodoController(IMapper mapper, TodoService todoService)
         {
             this.mapper = mapper;
+            this.todoService = todoService;
         }
 
         /// <summary>
@@ -26,7 +28,7 @@ namespace SleekFlow.Web.WebAPI.Controllers
         [HttpGet]
         public async Task<IEnumerable<Todo>> Get([FromQuery] TodoRequestFilter requestFilter)
         {
-            var result = await new TodoService().GetTodos(requestFilter);
+            var result = await todoService.GetTodos(requestFilter);
 
             return result;
         }
@@ -41,7 +43,7 @@ namespace SleekFlow.Web.WebAPI.Controllers
         {
             var creator = mapper.Map<Todo>(createTodo);
 
-            var result = await new TodoService().CreateTodo(creator);
+            var result = await todoService.CreateTodo(creator);
 
             return result;
         }
@@ -54,7 +56,7 @@ namespace SleekFlow.Web.WebAPI.Controllers
         [HttpPut]
         public async Task<Todo> Put([FromBody] Todo updateTodo)
         {
-            var result = await new TodoService().UpdateTodo(updateTodo);
+            var result = await todoService.UpdateTodo(updateTodo);
 
             return result;
         }
@@ -68,7 +70,7 @@ namespace SleekFlow.Web.WebAPI.Controllers
         [Route("{id}")]
         public async Task<long> Delete(long id)
         {
-            var result = await new TodoService().DeleteTodo(id);
+            var result = await todoService.DeleteTodo(id);
 
             return result;
         }
