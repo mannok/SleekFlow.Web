@@ -5,8 +5,8 @@
         /// <summary>
         /// username
         /// </summary>
-        /// <example>user1</example>
-        public string UserName { get; set; }
+        /// <example>admin</example>
+        public string Username { get; set; }
         /// <summary>
         /// password
         /// </summary>

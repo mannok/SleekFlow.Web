@@ -26,6 +26,7 @@ namespace SleekFlow.Web.WebAPI.Controllers
         /// <param name="id">todo id, e.g. 4</param>
         /// <returns></returns>
         [HttpGet("{id}")]
+        [Authorize(Roles = "user, admin")]
         public async Task<Todo?> Get(long id)
         {
             var result = (await todoService.GetTodos(new TodoRequestFilter { Id = id })).SingleOrDefault();
@@ -39,6 +40,7 @@ namespace SleekFlow.Web.WebAPI.Controllers
         /// <param name="requestFilter"></param>
         /// <returns></returns>
         [HttpGet]
+        [Authorize(Roles = "user, admin")]
         public async Task<IEnumerable<Todo>> Search([FromQuery] TodoRequestFilter requestFilter)
         {
             var result = await todoService.GetTodos(requestFilter);
@@ -52,6 +54,7 @@ namespace SleekFlow.Web.WebAPI.Controllers
         /// <param name="createTodo"></param>
         /// <returns></returns>
         [HttpPost]
+        [Authorize(Roles = "admin")]
         public async Task<Todo> Post([FromBody] CreateTodoDto createTodo)
         {
             var creator = mapper.Map<Todo>(createTodo);
@@ -67,6 +70,7 @@ namespace SleekFlow.Web.WebAPI.Controllers
         /// <param name="updateTodo"></param>
         /// <returns></returns>
         [HttpPut]
+        [Authorize(Roles = "admin")]
         public async Task<Todo> Put([FromBody] Todo updateTodo)
         {
             var result = await todoService.UpdateTodo(updateTodo);
@@ -80,6 +84,7 @@ namespace SleekFlow.Web.WebAPI.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpDelete("{id}")]
+        [Authorize(Roles = "admin")]
         public async Task<long> Delete(long id)
         {
             var result = await todoService.DeleteTodo(id);
