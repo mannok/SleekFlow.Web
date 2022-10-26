@@ -5,6 +5,7 @@ using Audit.EntityFramework.Providers;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using SleekFlow.Web.DAL;
 
@@ -13,25 +14,27 @@ namespace SleekFlow.Web.DAL.DbContexts
     public partial class SleekFlowWebDbContext : AuditDbContext
     {
         private readonly IHttpContextAccessor httpContextAccessor;
+        private readonly IConfiguration configuration;
 
         public DbSet<Todos.Todo> Todos { get; set; }
         public DbSet<AuditEntry> AuditEntries { get; set; }
 
-        public SleekFlowWebDbContext()
+        public SleekFlowWebDbContext(IConfiguration configuration)
         {
+            this.configuration = configuration;
         }
 
-        public SleekFlowWebDbContext(DbContextOptions<SleekFlowWebDbContext> options)
+        public SleekFlowWebDbContext(DbContextOptions<SleekFlowWebDbContext> options, IConfiguration configuration)
             : base(options)
         {
+            this.configuration = configuration;
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
             {
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-                optionsBuilder.UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=SleekFlow.Web;Trusted_Connection=True;");
+                optionsBuilder.UseSqlServer(configuration.GetConnectionString("SleekFlowWebDb"));
             }
         }
 
