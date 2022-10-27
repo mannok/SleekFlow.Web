@@ -6,39 +6,45 @@ using SleekFlow.Web.WebAPI.Test.SleekFlowWebApiClient;
 
 namespace SleekFlow.Web.WebAPI.Test
 {
-    public class TodoCrudTest
+    internal class TodoCrudTest : WebApiTestBase
     {
-        private string? token;
-        private ISleekFlowWebApiClient apiClient;
         private string todoName;
 
         [OneTimeSetUp]
-        public void OneTimeSetUp()
+        public override void OneTimeSetUp()
         {
-            apiClient = RestService.For<ISleekFlowWebApiClient>(Common.Configuration["ApiBase"], new RefitSettings()
-            {
-                AuthorizationHeaderValueGetter = () => Task.FromResult(token)
-            });
-
             todoName = $"test-todo-{DateTime.Now.Ticks}";
 
-            Login("admin").Wait();
+            base.OneTimeSetUp();
         }
 
         [OneTimeTearDown]
-        public void OneTimeTearDown()
+        public override void OneTimeTearDown()
         {
+            base.OneTimeTearDown();
         }
 
-        private async Task Login(string username)
+        public override void TearDown()
         {
-            token = await Common.GetToken(username);
+            Login("admin").Wait();
+            CleanupTestTodo().Wait();   // comment this line if you want to see created record in db
+
+            base.TearDown();
         }
 
-        [Test, Order(1)]
-        public async Task CreateTodo()
+
+        public async Task CleanupTestTodo()
         {
-            var todo = await apiClient.CreateTodo(new CreateTodoDto
+            var todos = (await apiClient.SearchTodo(new TodoRequestFilter { Name = todoName })).ToArray();
+            await Task.WhenAll(todos.Select(todo => apiClient.DeleteTodo(todo.Id)));
+        }
+
+        [Test]
+        public async Task TestCreateAndSearchTodo()
+        {
+            await Login("admin");
+
+            var createdTodo = await apiClient.CreateTodo(new CreateTodoDto
             {
                 Name = todoName,
                 Description = $"desc-test",
@@ -46,38 +52,47 @@ namespace SleekFlow.Web.WebAPI.Test
                 Status = "A"
             });
 
-            Assert.That(todo.Name, Is.EqualTo(todoName), "todo creation failed");
+            Assert.That(createdTodo.Name, Is.EqualTo(todoName), "todo creation failed");
+
+            var searchedTodo = (await apiClient.SearchTodo(new TodoRequestFilter { Id = createdTodo.Id })).SingleOrDefault();
+
+            Assert.That(searchedTodo?.Name, Is.EqualTo(todoName), "search or create todo failed");
         }
 
-        [Test, Order(2)]
-        public async Task SearchTodo()
+        [Test]
+        public async Task TestUpdateTodo()
         {
-            var todos = await apiClient.SearchTodo(new TodoRequestFilter
+            await Login("admin");
+
+            var before = await apiClient.CreateTodo(new CreateTodoDto
             {
-                Name = todoName
+                Name = todoName,
+                Description = $"desc-test",
+                DueDate = DateTime.Now.AddDays(1),
+                Status = "A"
             });
-
-            Assert.That(todos.All(x => x.Name == todoName), Is.True, "search todo failed");
-        }
-
-        [Test, Order(3)]
-        public async Task UpdateTodo()
-        {
-            var before = (await apiClient.SearchTodo(new TodoRequestFilter { Name = todoName })).First();
 
             before.Description = "updated description";
 
             await apiClient.UpdateTodo(before);
 
-            var after = (await apiClient.SearchTodo(new TodoRequestFilter { Id = before.Id })).FirstOrDefault();
+            var after = (await apiClient.SearchTodo(new TodoRequestFilter { Id = before.Id })).SingleOrDefault();
 
             Assert.That(after?.Description, Is.EqualTo("updated description"), "updaed todo failed");
         }
 
-        [Test, Order(4)]
-        public async Task DeleteTodo()
+        [Test]
+        public async Task TestDeleteTodo()
         {
-            var before = (await apiClient.SearchTodo(new TodoRequestFilter { Name = todoName })).First();
+            await Login("admin");
+
+            var before = await apiClient.CreateTodo(new CreateTodoDto
+            {
+                Name = todoName,
+                Description = $"desc-test",
+                DueDate = DateTime.Now.AddDays(1),
+                Status = "A"
+            });
 
             await apiClient.DeleteTodo(before.Id);
 

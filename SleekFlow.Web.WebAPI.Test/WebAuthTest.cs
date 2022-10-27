@@ -9,35 +9,26 @@ using System.Net;
 
 namespace SleekFlow.Web.WebAPI.Test
 {
-    public class WebAuthTest
+    internal class WebAuthTest : WebApiTestBase
     {
-        private string? token;
-        private ISleekFlowWebApiClient apiClient;
 
         [OneTimeSetUp]
         public void OneTimeSetUp()
         {
-            apiClient = RestService.For<ISleekFlowWebApiClient>(Common.Configuration["ApiBase"], new RefitSettings()
-            {
-                AuthorizationHeaderValueGetter = () => Task.FromResult(token)
-            });
-
-            Login("admin").Wait();
+            base.OneTimeSetUp();
         }
 
         [OneTimeTearDown]
         public void OneTimeTearDown()
         {
-        }
-
-        private async Task Login(string username)
-        {
-            token = await Common.GetToken(username);
+            base.OneTimeTearDown();
         }
 
         [Test, Order(1)]
         public async Task TestLogin()
         {
+            await Login("admin");
+
             try { new JwtSecurityToken(token); }
             catch { Assert.Fail("login failed"); }
 
@@ -54,13 +45,13 @@ namespace SleekFlow.Web.WebAPI.Test
 
             var unauthorizedResponse = await RestService.For<ISleekFlowWebApiClient>(Common.Configuration["ApiBase"], new RefitSettings()
             {
-                AuthorizationHeaderValueGetter = async () => await Common.GetToken("user")
+                AuthorizationHeaderValueGetter = async () => await GetToken("user")
             }).RawTestAuthorization();
             Assert.That(unauthorizedResponse.StatusCode, Is.EqualTo(HttpStatusCode.Forbidden), "authorization failed");
 
             var authorizedResponse = await RestService.For<ISleekFlowWebApiClient>(Common.Configuration["ApiBase"], new RefitSettings()
             {
-                AuthorizationHeaderValueGetter = async () => await Common.GetToken("admin")
+                AuthorizationHeaderValueGetter = async () => await GetToken("admin")
             }).RawTestAuthorization();
             Assert.That(authorizedResponse.IsSuccessStatusCode, Is.True, "authorization failed");
         }

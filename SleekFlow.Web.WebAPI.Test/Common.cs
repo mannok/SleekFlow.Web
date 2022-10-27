@@ -18,15 +18,5 @@ namespace SleekFlow.Web.WebAPI.Test
         {
             Configuration = new ConfigurationBuilder().AddJsonFile($"appsettings.json", true, true).Build();
         }
-        public static async Task<string> GetToken(string username)
-        {
-            var token = await RestService.For<ISleekFlowWebApiClient>(Common.Configuration["ApiBase"]).Login(new LoginDto
-            {
-                Username = Configuration[$"Users:{username}:Username"],
-                Password = Configuration[$"Users:{username}:Password"],
-            });
-
-            return token;
-        }
     }
 }
