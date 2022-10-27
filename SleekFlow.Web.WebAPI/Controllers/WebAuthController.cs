@@ -99,6 +99,13 @@ namespace SleekFlow.Web.WebAPI.Controllers
             return await Task.FromResult(User.Identity?.IsAuthenticated ?? false);
         }
 
+        /// <summary>
+        /// use to test authentication by returning different status code
+        /// </summary>
+        /// <returns></returns>
+        /// <response code="200">haven't logged in</response>
+        /// <response code="401">cannot authenticate</response>
+        /// <response code="403">cannot authorize</response>
         [HttpGet]
         [Route("TestAuthorization")]
         [Authorize(Roles = "admin")]
