@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SleekFlow.Web.DAL.DbContexts;
 
@@ -11,9 +12,10 @@ using SleekFlow.Web.DAL.DbContexts;
 namespace SleekFlow.Web.DAL.Migrations
 {
     [DbContext(typeof(SleekFlowWebDbContext))]
-    partial class SleekFlowWebDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221027051902_BasicAuditing")]
+    partial class BasicAuditing
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

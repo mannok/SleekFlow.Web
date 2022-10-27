@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SleekFlow.Web.Domain;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace SleekFlow.Web.Todos
 {
-    public class Todo
+    public class Todo : AuditEntityBase
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
