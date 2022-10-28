@@ -1,4 +1,5 @@
-﻿using Audit.EntityFramework.Providers;
+﻿using Audit.Core;
+using Audit.EntityFramework.Providers;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
@@ -16,9 +17,10 @@ namespace SleekFlow.Web.DAL
     {
         public static void UseDbAuditTrail(this IApplicationBuilder applicationBuilder)
         {
-            Audit.Core.Configuration.Setup().UseFactory(() => new EntityFrameworkDataProvider()
+            Configuration.Setup().UseFactory(() => new EntityFrameworkDataProvider()
             {
                 DbContextBuilder = ev => applicationBuilder.ApplicationServices.CreateScope().ServiceProvider.GetRequiredService<SleekFlowWebDbContext>(),
+                DisposeDbContext = true,
                 ExplicitMapper = ee => typeof(AuditEntry),
                 AuditEntityAction = (evt, entry, auditEntity) =>
                 {
