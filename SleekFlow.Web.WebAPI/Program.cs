@@ -105,7 +105,7 @@ namespace SleekFlow.Web.WebAPI
 
             app.UseDbAuditTrail();
 
-            app.UseHttpsRedirection();
+            if (!app.Environment.IsDevelopment()) app.UseHttpsRedirection();
 
             app.UseAuthentication();
             app.UseAuthorization();
