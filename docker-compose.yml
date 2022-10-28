@@ -1,0 +1,23 @@
+version: '3.4'
+
+services:
+  sleekflow.web.webapi:
+    image: ${DOCKER_REGISTRY-}sleekflowwebwebapi
+    container_name: sleekflowwebwebapi
+    build:
+      context: .
+      dockerfile: SleekFlow.Web.WebAPI/Dockerfile
+    depends_on:
+      - sleekflow.web.db
+    restart: always
+      
+  sleekflow.web.db:
+    image: "mcr.microsoft.com/mssql/server"
+    container_name: sleekflowwebdb
+    ports:
+      - "11433:1433"
+    restart: always
+    environment:
+      MSSQL_SA_PASSWORD: "P@ssw0rd"
+      SA_PASSWORD: "P@ssw0rd"
+      ACCEPT_EULA: "Y"

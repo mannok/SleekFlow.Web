@@ -9,9 +9,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SleekFlow.Web.Domain", "Sle
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SleekFlow.Web.DAL", "SleekFlow.Web.DAL\SleekFlow.Web.DAL.csproj", "{2E91C045-5A61-4C31-95F5-ADF073A6AB76}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SleekFlow.Web.Application", "SleekFlow.Web.Application\SleekFlow.Web.Application.csproj", "{811BE4EA-8C7F-428A-9E1B-DADA568D7E5E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SleekFlow.Web.Application", "SleekFlow.Web.Application\SleekFlow.Web.Application.csproj", "{811BE4EA-8C7F-428A-9E1B-DADA568D7E5E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SleekFlow.Web.WebAPI.Test", "SleekFlow.Web.WebAPI.Test\SleekFlow.Web.WebAPI.Test.csproj", "{5F095B99-9AA7-45A8-A3A3-D56BF2A54107}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SleekFlow.Web.WebAPI.Test", "SleekFlow.Web.WebAPI.Test\SleekFlow.Web.WebAPI.Test.csproj", "{5F095B99-9AA7-45A8-A3A3-D56BF2A54107}"
+EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{EBDA4079-5301-488D-85D1-0195E286C991}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{5F095B99-9AA7-45A8-A3A3-D56BF2A54107}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5F095B99-9AA7-45A8-A3A3-D56BF2A54107}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5F095B99-9AA7-45A8-A3A3-D56BF2A54107}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EBDA4079-5301-488D-85D1-0195E286C991}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EBDA4079-5301-488D-85D1-0195E286C991}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EBDA4079-5301-488D-85D1-0195E286C991}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EBDA4079-5301-488D-85D1-0195E286C991}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

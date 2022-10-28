@@ -2,14 +2,12 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.AspNetCore.Mvc.Formatters;
-using Microsoft.Extensions.DependencyInjection;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using Newtonsoft.Json;
 using SleekFlow.Web.DAL;
 using SleekFlow.Web.DAL.DbContexts;
 using SleekFlow.Web.Todos;
-using System.IdentityModel.Tokens.Jwt;
 using System.Reflection;
 using System.Text;
 
@@ -20,6 +18,12 @@ namespace SleekFlow.Web.WebAPI
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+
+            if (builder.Environment.IsDevelopment())    // create db only for development purpose
+            {
+                using var ctx = new SleekFlowWebDbContext(builder.Configuration, null!);
+                ctx.Database.Migrate();
+            }
 
             // Add services to the container.
 
