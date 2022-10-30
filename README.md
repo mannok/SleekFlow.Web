@@ -2,6 +2,13 @@
 
 this is the exercise done by Xanthus Wong for SleekFlow post application.
 
+# Contact Information
+
+please feel free to contact me for any question/uncertainty
+
+- mobile: 67933067 [phone or whatsapp]
+- email: xanthusmnwong@gmail.com
+
 # Prerequisite
 
 - docker installed
